@@ -7,14 +7,16 @@ from google.cloud import pubsub_v1
 
 # Instantiates a Pub/Sub client
 publisher = pubsub_v1.PublisherClient()
-PROJECT_ID = os.getenv('GOOGLE_CLOUD_PROJECT')
+PROJECT_ID = "kimo-kube"
+GET_URL_DATA_TOPIC_ID="get-url-data"
+PROCESS_DATA_TOPIC_ID="process_data"
 
 
 # Publishes a message to a Cloud Pub/Sub topic.
 def publish(request):
     request_json = request.get_json(silent=True)
 
-    topic_name = request_json.get("topic")
+    topic_name = TOPIC_ID
     message = request_json.get("message")
 
     if not topic_name or not message:
@@ -43,4 +45,5 @@ def publish(request):
 # Triggered from a message on a Cloud Pub/Sub topic.
 def subscribe(event, context):
     # Print out the data from Pub/Sub, to prove that it worked
+    ## Fetches the url from the pub/sub and process it and send push it to the Pub/Sub again
     print(base64.b64decode(event['data']))
