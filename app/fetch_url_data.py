@@ -36,16 +36,22 @@ class GetDataFromUrl():
                 if r.status_code == 200:
                     _res['status_code'] = r.status_code
                     _res['data'] = r
+                    return _res
+                    break
                 else:
                     _res['status_code'] = r.status_code
                     _res['data'] = None
-                break
+                    return _res
+                    break
             except MaxRetryError:
                 logger.info("Exception raised while trying to retrieve data.")
                 time.sleep(5)
+                if idx == 5:
+                    _res['data'] = None
+                    _res['status_code'] = None
 
-        _res['data'] = None
-        return _res
+        #_res['data'] = None
+        #return _res
             
 
     def _makeSoup(self, response):
